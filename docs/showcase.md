@@ -1,11 +1,8 @@
-# Akka Workshop 2017
+## Welcome to GitHub Pages
 
-### Table of Contents
-1. Introduction
-2. Basic Akka Concepts
-3. Show-Case / Real-World Example
-4. Tutorial / Workshop
+You can use the [editor on GitHub](https://github.com/sebivenlo/akka-workshop2017/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
+Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
 ### Markdown
 
