@@ -26,7 +26,6 @@ abstract class AbstractRecipe implements Recipe {
     @Override
     public int hashCode() {
         return Integer.hashCode(getCookingTime())
-                + Integer.hashCode(getRecordTime())
                 + Integer.hashCode(getServingTime())
                 + Boolean.hashCode(this.requireAttention());
     }

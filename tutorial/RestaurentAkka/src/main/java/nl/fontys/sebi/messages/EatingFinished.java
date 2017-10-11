@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 lukeelten
+ * Copyright (C) 2017 Tobias Derksen <tobias.derksen@student.fontys.nl>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,21 +15,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi.recipes;
+package nl.fontys.sebi.messages;
 
 /**
  *
- * @author lukeelten
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
-public interface Recipe {
-    
-    int getCookingTime();
-    
-    default int getServingTime() {
-        return 5;
-    }
-    
-    default boolean requireAttention() {
-        return false;
-    }
+public class EatingFinished {   
 }

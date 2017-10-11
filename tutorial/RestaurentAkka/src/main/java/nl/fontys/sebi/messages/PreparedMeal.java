@@ -17,29 +17,28 @@
  */
 package nl.fontys.sebi.messages;
 
-import java.util.Collections;
-import java.util.List;
-import nl.fontys.sebi.Customer;
+import akka.actor.ActorRef;
 import nl.fontys.sebi.recipes.Recipe;
 
 /**
  *
  * @author lukeelten
  */
-public class NewOrder {
-    private final List<Recipe> recipes;
-    private final Customer customer;
+public class PreparedMeal {
     
-    public NewOrder(final Customer customer, final List<Recipe> recipes) {
+    private final Recipe meal;
+    private final ActorRef customer;
+
+    public PreparedMeal(ActorRef customer, Recipe meal) {
         this.customer = customer;
-        this.recipes = recipes;
+        this.meal = meal;
     }
 
-    public List<Recipe> getRecipes() {
-        return Collections.unmodifiableList(recipes);
+    public Recipe getMeal() {
+        return meal;
     }
 
-    public Customer getCustomer() {
+    public ActorRef getCustomer() {
         return customer;
     }
 }

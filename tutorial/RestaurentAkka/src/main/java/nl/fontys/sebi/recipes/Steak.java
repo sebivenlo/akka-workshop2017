@@ -25,7 +25,7 @@ public class Steak extends AbstractRecipe {
 
     @Override
     public int getCookingTime() {
-        return 20;
+        return 5;
     }
 
     @Override

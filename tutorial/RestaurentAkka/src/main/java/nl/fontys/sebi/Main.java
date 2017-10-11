@@ -18,17 +18,38 @@
 package nl.fontys.sebi;
 
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.actor.Props;
+import java.io.IOException;
+import nl.fontys.sebi.actors.Restaurant;
+import nl.fontys.sebi.messages.OpeningMessage;
+import nl.fontys.sebi.messages.PoisonPill;
+
+
+
 /**
  *
  * @author lukeelten
  */
 public class Main {
     
-    public static void main(String[] args) {
-        Restaurant rest = new Restaurant();
+    public static void main(String[] args) throws IOException, InterruptedException {
+        ActorSystem system = ActorSystem.create();
         
-        
-        
+        try {
+            ActorRef restaurant = system.actorOf(Props.create(Restaurant.class), "restaurant");
+            
+            restaurant.tell(new OpeningMessage(), restaurant);
+            
+            System.out.println("Press ENTER to exit the system");
+            System.in.read();
+            
+            restaurant.tell(new PoisonPill(), restaurant);
+            Thread.sleep(1);
+        } finally {
+            system.terminate();
+        }
     }
     
 }

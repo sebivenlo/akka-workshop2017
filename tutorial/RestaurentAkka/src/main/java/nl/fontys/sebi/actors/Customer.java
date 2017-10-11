@@ -15,15 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi;
+package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import nl.fontys.sebi.messages.MealPrepared;
-import nl.fontys.sebi.messages.NoMoreOrders;
-import nl.fontys.sebi.messages.Order;
+import nl.fontys.sebi.messages.CompleteOrder;
+import nl.fontys.sebi.messages.EatingFinished;
+import nl.fontys.sebi.messages.PreparedMeal;
 import nl.fontys.sebi.messages.WhatsYourOrder;
 import nl.fontys.sebi.recipes.Recipe;
 
@@ -35,77 +37,73 @@ public class Customer extends AbstractActor {
     private final static Random random = new Random(System.currentTimeMillis());
     
     private final String name;
-    private final int table;
-    
-    private int orders;
     private final List<Class<? extends Recipe>> menu;
     
-    private final List<Order> ordered;
+    private final List<Class<? extends Recipe>> order;
     
-    public Customer(String name, int table, List<Class<? extends Recipe>> menu) {
+    public Customer(String name, List<Class<? extends Recipe>> menu) {
         if (name == null || menu == null) throw new NullPointerException();
-        if (table <= 0) throw new IllegalArgumentException();
         if (menu.isEmpty()) throw new RuntimeException();
         
         this.name = name;
-        this.table = table;
         this.menu = menu;
-        
-        orders = random.nextInt(4) + 1;
-        ordered = new ArrayList<>(orders);
+        order = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
-
-    public int getTable() {
-        return table;
+    
+    private CompleteOrder getOrder() {
+        int meals = random.nextInt(10) + 1;
+        
+        for (int i = 0; i < meals; i++) {
+            int menuIndex = abs(random.nextInt()) % menu.size();
+            
+            order.add(menu.get(menuIndex)); 
+        }
+        
+        List<Class<? extends Recipe>> tmp = new ArrayList<>(order.size());
+        Collections.copy(order, tmp);
+        
+        return new CompleteOrder(getSelf(), Collections.unmodifiableList(tmp));
     }
     
-    public Order getNextOrder() {
-        if (!hasNextOrder()) return null;
+    private void receiveMeal(PreparedMeal meal) {
+        Class<? extends Recipe> recipe = meal.getMeal().getClass();
+        int index = order.indexOf(recipe);
+        order.remove(index);
         
-        Class<? extends Recipe> recipe = menu.get((random.nextInt() % menu.size()));
+        /**
+         * @todo wait for eating
+         */
         
-        Order order = new Order(recipe, random.nextInt(4));
-        ordered.add(order);
-        return order;
-    }
-    
-    public boolean hasNextOrder() {
-        return orders > ordered.size();
+        if (order.isEmpty()) {
+            getContext().getParent().tell(new EatingFinished(), getSelf());
+        }
     }
 
     @Override
     public int hashCode() {
-        return 31 * name.hashCode() + 17 * table;
+        return 31 * name.hashCode() + order.hashCode();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o instanceof Customer) {
             Customer rhs = (Customer) o;
-            return (rhs.name.equals(name) && table == rhs.table && menu.equals(rhs.menu));
+            return (rhs.name.equals(name) && menu.equals(rhs.menu)) && order.equals(rhs.order);
         }
-        
         return false;
     }
 
     @Override
     public Receive createReceive() {
-        return receiveBuilder().match(WhatsYourOrder.class, wyo -> {
-            System.out.println("Table " + table + ": What´s your order?");
-            if (hasNextOrder()) {
-                Order order = getNextOrder();
-                System.out.println("Table " + table + ": Ordering " + order.getRecipe().getSimpleName());
-                getSender().tell(order, getSelf());
-            } else {
-                System.out.println("Table " + table + ": No More Orders");
-                getSender().tell(new NoMoreOrders(), getSelf());
-            }
-        }).match(MealPrepared.class, msg -> {
-            
-        }).build();
+        return receiveBuilder()
+                .match(WhatsYourOrder.class, wyo -> {
+                    getSender().tell(getOrder(), getSelf());
+                }).match(PreparedMeal.class, pm -> {
+                    receiveMeal(pm);
+                }).build();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 lukeelten
+ * Copyright (C) 2017 Tobias Derksen <tobias.derksen@student.fontys.nl>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,26 +17,12 @@
  */
 package nl.fontys.sebi.messages;
 
-import nl.fontys.sebi.recipes.Recipe;
-
 /**
  *
- * @author lukeelten
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
-public class Order {
-    private final Class<? extends Recipe> recipe;
-    private final int amount;
-
-    public Order(Class<? extends Recipe> recipe, int amount) {
-        this.recipe = recipe;
-        this.amount = amount;
-    }
-
-    public Class<? extends Recipe> getRecipe() {
-        return recipe;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
+public class PoisonPill extends akka.actor.PoisonPill {
+    
+    private static final long serialVersionUID = 1L;
+    
 }

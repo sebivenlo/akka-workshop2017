@@ -25,7 +25,7 @@ public class BakedPotatos extends AbstractRecipe {
 
     @Override
     public int getCookingTime() {
-        return 15;
+        return 3;
     }
     
 }

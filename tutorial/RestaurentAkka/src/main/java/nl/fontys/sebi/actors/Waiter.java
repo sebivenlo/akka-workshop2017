@@ -15,11 +15,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi.messages;
+package nl.fontys.sebi.actors;
+
+import akka.actor.AbstractActor;
+import nl.fontys.sebi.messages.CompleteOrder;
+import nl.fontys.sebi.messages.CustomerEntered;
+import nl.fontys.sebi.messages.PreparedMeal;
+import nl.fontys.sebi.messages.WhatsYourOrder;
+
 
 /**
  *
  * @author lukeelten
  */
-public class NoMoreOrders {
+public class Waiter extends AbstractActor {
+
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+                .match(CustomerEntered.class, ce -> {
+                    ce.getCustomer().tell(new WhatsYourOrder(), getSelf());
+                }).match(CompleteOrder.class, co -> {
+                    getContext().getParent().tell(co, getSelf());
+                }).match(PreparedMeal.class, pm -> {
+                    pm.getCustomer().tell(pm, getSelf());
+                }).build();
+    }
 }

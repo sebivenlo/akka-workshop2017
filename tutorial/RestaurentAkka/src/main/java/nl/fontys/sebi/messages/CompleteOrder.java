@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 lukeelten
+ * Copyright (C) 2017 Tobias Derksen <tobias.derksen@student.fontys.nl>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,10 +17,29 @@
  */
 package nl.fontys.sebi.messages;
 
+import akka.actor.ActorRef;
+import java.util.List;
+import nl.fontys.sebi.recipes.Recipe;
+
 /**
  *
- * @author lukeelten
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
-public class MealPrepared {
+public class CompleteOrder {
     
+    private final List<Class<? extends Recipe>> recipes;
+    private final ActorRef customer;
+
+    public CompleteOrder(ActorRef customer, List<Class<? extends Recipe>> recipes) {
+        this.customer = customer;
+        this.recipes = recipes;
+    }
+
+    public List<Class<? extends Recipe>> getRecipes() {
+        return recipes;
+    }
+
+    public ActorRef getCustomer() {
+        return customer;
+    }
 }

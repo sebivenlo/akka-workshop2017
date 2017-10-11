@@ -25,7 +25,7 @@ public class PastaAlaMax extends AbstractRecipe {
 
     @Override
     public int getCookingTime() {
-        return 5;
+        return 2;
     }
     
 }
