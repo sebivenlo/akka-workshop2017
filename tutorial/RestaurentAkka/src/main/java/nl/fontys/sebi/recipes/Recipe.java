@@ -15,20 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi;
+package nl.fontys.sebi.recipes;
 
+import akka.util.HashCode;
 
 /**
  *
  * @author lukeelten
  */
-public class Main {
+public interface Recipe {
     
-    public static void main(String[] args) {
-        Restaurant rest = new Restaurant();
-        
-        
-        
+    int getCookingTime();
+    
+    default int getServingTime() {
+        return 5;
     }
     
+    default int getRecordTime() {
+        return 5;
+    }
+    
+    default boolean requireAttention() {
+        return false;
+    }
 }

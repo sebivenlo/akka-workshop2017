@@ -15,20 +15,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi;
-
+package nl.fontys.sebi.recipes;
 
 /**
  *
  * @author lukeelten
  */
-public class Main {
+abstract class AbstractRecipe implements Recipe {
     
-    public static void main(String[] args) {
-        Restaurant rest = new Restaurant();
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(getCookingTime())
+                + Integer.hashCode(getRecordTime())
+                + Integer.hashCode(getServingTime())
+                + Boolean.hashCode(this.requireAttention());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Recipe) {
+            Recipe rhs = (Recipe) o;
+            
+            return rhs.hashCode() == this.hashCode();
+        }
         
-        
-        
+        return false;
     }
     
 }

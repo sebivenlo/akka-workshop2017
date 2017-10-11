@@ -15,20 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package nl.fontys.sebi;
+package nl.fontys.sebi.messages;
 
+import nl.fontys.sebi.recipes.Recipe;
 
 /**
  *
  * @author lukeelten
  */
-public class Main {
-    
-    public static void main(String[] args) {
-        Restaurant rest = new Restaurant();
-        
-        
-        
+public class Order {
+    private final Class<? extends Recipe> recipe;
+    private final int amount;
+
+    public Order(Class<? extends Recipe> recipe, int amount) {
+        this.recipe = recipe;
+        this.amount = amount;
     }
-    
+
+    public Class<? extends Recipe> getRecipe() {
+        return recipe;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }
