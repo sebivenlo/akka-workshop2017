@@ -24,9 +24,6 @@ import akka.actor.Props;
 import java.io.IOException;
 import nl.fontys.sebi.actors.Restaurant;
 import nl.fontys.sebi.messages.OpeningMessage;
-import nl.fontys.sebi.messages.PoisonPill;
-
-
 
 /**
  *
@@ -40,13 +37,10 @@ public class Main {
         try {
             ActorRef restaurant = system.actorOf(Props.create(Restaurant.class), "restaurant");
             
-            restaurant.tell(new OpeningMessage(), restaurant);
+            restaurant.tell(new OpeningMessage(), ActorRef.noSender());
             
             System.out.println("Press ENTER to exit the system");
             System.in.read();
-            
-            restaurant.tell(new PoisonPill(), restaurant);
-            Thread.sleep(1);
         } finally {
             system.terminate();
         }

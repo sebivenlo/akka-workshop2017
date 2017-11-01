@@ -25,7 +25,7 @@ public interface Recipe {
     
     int getCookingTime();
     
-    default int getServingTime() {
+    default int getEatingTime() {
         return 5;
     }
     

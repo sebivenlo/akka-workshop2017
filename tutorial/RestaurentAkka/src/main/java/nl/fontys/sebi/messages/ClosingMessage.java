@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Tobias Derksen <tobias.derksen@student.fontys.nl>
+ * Copyright (C) 2017 lukeelten
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,10 +19,8 @@ package nl.fontys.sebi.messages;
 
 /**
  *
- * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
+ * @author lukeelten
  */
-public class PoisonPill extends akka.actor.PoisonPill {
-    
-    private static final long serialVersionUID = 1L;
+public class ClosingMessage {
     
 }

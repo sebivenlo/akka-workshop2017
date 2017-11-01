@@ -18,6 +18,7 @@
 package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import nl.fontys.sebi.messages.CompleteOrder;
 import nl.fontys.sebi.messages.PreparedMeal;
@@ -30,11 +31,12 @@ import nl.fontys.sebi.recipes.Recipe;
 public class Chef extends AbstractActor {
     
     public Chef() {
-        System.out.println("Creating Chef");
+        //System.out.println("Creating Chef");
     }
     
     private Recipe prepareMeal(Class<? extends Recipe> recipe) {
         try {
+            System.out.println("Chef prepares: " + recipe.getSimpleName());
             Recipe meal = recipe.newInstance();
             
             if (meal.requireAttention()) {
@@ -58,11 +60,13 @@ public class Chef extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(CompleteOrder.class, order -> {
-                    for (Class<? extends Recipe> recipe : order.getRecipes()) {
-                        Recipe meal = prepareMeal(recipe);
-                        getSender().tell(new PreparedMeal(order.getCustomer(), meal), getSelf());
-                    }
+                    List<Class<? extends Recipe>> recipes = order.getRecipes();
                     
+                    for (Class<? extends Recipe> recipe : recipes) {
+                        Recipe meal = prepareMeal(recipe);
+                        PreparedMeal prepared = new PreparedMeal(order.getCustomer(), meal);
+                        getSender().tell(prepared, getSelf());
+                    }
                 }).build();
     }
     

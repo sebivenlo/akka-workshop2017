@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import nl.fontys.sebi.messages.CompleteOrder;
 import nl.fontys.sebi.messages.EatingFinished;
 import nl.fontys.sebi.messages.PreparedMeal;
@@ -60,11 +62,12 @@ public class Customer extends AbstractActor {
         for (int i = 0; i < meals; i++) {
             int menuIndex = abs(random.nextInt()) % menu.size();
             
-            order.add(menu.get(menuIndex)); 
+            Class<? extends Recipe> recipe = menu.get(menuIndex);
+            order.add(recipe); 
         }
         
-        List<Class<? extends Recipe>> tmp = new ArrayList<>(order.size());
-        Collections.copy(order, tmp);
+        List<Class<? extends Recipe>> tmp = order.stream().collect(Collectors.toList());
+        System.out.println("Ordering " + tmp.size() + " meals");
         
         return new CompleteOrder(getSelf(), Collections.unmodifiableList(tmp));
     }
@@ -74,9 +77,13 @@ public class Customer extends AbstractActor {
         int index = order.indexOf(recipe);
         order.remove(index);
         
-        /**
-         * @todo wait for eating
-         */
+        System.out.println("Received Meal: " + recipe.getSimpleName() + " - " + order.size() + " to go");
+        
+        try {
+            Thread.sleep(TimeUnit.SECONDS.toMillis(meal.getMeal().getEatingTime()));
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
         
         if (order.isEmpty()) {
             getContext().getParent().tell(new EatingFinished(), getSelf());
