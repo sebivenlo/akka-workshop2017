@@ -9,7 +9,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import nl.fontys.sebi.Util;
 import nl.fontys.sebi.messages.CompleteOrder;
-import nl.fontys.sebi.messages.EatingFinished;
 import nl.fontys.sebi.messages.PreparedMeal;
 import nl.fontys.sebi.messages.WhatsYourOrder;
 import nl.fontys.sebi.recipes.Recipe;
@@ -71,10 +70,7 @@ public class Customer extends AbstractActor {
         int index = order.indexOf(recipe);
         order.remove(index);
         
-        // TODO Q2 Does the order-list need synchronization somehow?
-        if (order.isEmpty()) {
-            getContext().getParent().tell(new EatingFinished(), getSelf());
-        }
+        // TODO if all orders has been served, tell restaurant we are finished (EatingFinished)
     }
 
     @Override

@@ -76,16 +76,11 @@ public class Restaurant extends AbstractActor {
      * @param msg 
      */
     private void open(OpeningMessage msg) {
-        Props waiterProps = Props.create(Waiter.class);
-        Props chefProps = Props.create(Chef.class);
-        
-        //waiter = getContext().actorOf(waiterProps, "waiter");
-        waiter = getContext().actorOf(new RoundRobinPool(msg.neededWaiters()).props(waiterProps), "waiter");
+        // TODO create actor for waiter
         getContext().watch(waiter);
         System.out.println("Created actor: " + waiter.path().toString());
         
-        //chef = getContext().actorOf(Props.create(Chef.class), "chef");
-        chef = getContext().actorOf(new RoundRobinPool(msg.neededChefs()).props(chefProps), "chef");
+        // TODO create actor for chef
         getContext().watch(chef);
         System.out.println("Created actor: " + chef.path().toString());
     }
@@ -103,8 +98,7 @@ public class Restaurant extends AbstractActor {
             });
         }
         
-        waiter.tell(PoisonPill.getInstance(), getSelf());
-        chef.tell(PoisonPill.getInstance(), getSelf());
+        // TODO fire the staff
     }
     
     /**
@@ -131,15 +125,17 @@ public class Restaurant extends AbstractActor {
         customer.tell(PoisonPill.getInstance(), getSelf());
         System.out.println("Table " + table + " finished.");
         
-        if (customers.isEmpty()) {
-            getSelf().tell(new ClosingMessage(), ActorRef.noSender());
-        }
+        // TODO the restaurant should close when there no customers anymore
     }
     
     @Override
     public Receive createReceive() {
+        // TODO Restaurant should also handle the following messages:
+        // EatingFinished
+        // OpeningMessage
+        // EnteringMessage
+        
         return receiveBuilder()
-                .match(OpeningMessage.class, om -> { open(om); })
                 .match(ClosingMessage.class, pp -> { close(); })
                 .match(Terminated.class, t -> {
                     System.out.println(t.actor().path() + " has stopped working");
@@ -157,12 +153,8 @@ public class Restaurant extends AbstractActor {
                 .match(PreparedMeal.class, pm -> {
                     waiter.tell(pm, getSelf());
                 })
-                .match(EnteringMessage.class, m -> { enterRestaurant(m.getName()); })
                 .match(CompleteOrder.class, fo -> {
                     chef.tell(fo, getSelf());
-                }).match(EatingFinished.class, ef -> {
-                    ActorRef customer = getSender();
-                    eatingFinished(customer);
                 }).build();
     }
      

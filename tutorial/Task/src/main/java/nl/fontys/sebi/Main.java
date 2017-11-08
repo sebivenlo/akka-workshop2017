@@ -3,11 +3,8 @@ package nl.fontys.sebi;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import akka.actor.Props;
 import akka.actor.Terminated;
 import java.io.IOException;
-import nl.fontys.sebi.actors.Restaurant;
-import nl.fontys.sebi.messages.EnteringMessage;
 import nl.fontys.sebi.messages.OpeningMessage;
 import scala.concurrent.Future;
 
@@ -22,13 +19,13 @@ public class Main {
        
         ActorSystem system = ActorSystem.create();
         try {
-            ActorRef restaurant = system.actorOf(Props.create(Restaurant.class, 10), "restaurant");
+            // TODO Create restaurant actor 
+            ActorRef restaurant = null;
             
             restaurant.tell(new OpeningMessage(5, 3), ActorRef.noSender());
-            restaurant.tell(new EnteringMessage("Heinz"), restaurant);
-            restaurant.tell(new EnteringMessage("Hans"), restaurant);
-            restaurant.tell(new EnteringMessage("Klaus"), restaurant);
-            restaurant.tell(new EnteringMessage("Horst"), restaurant);
+            
+            // TODO there should be some customers or not?
+            
             Future<Terminated> termination = system.whenTerminated();
             
             while (!termination.isCompleted()) {

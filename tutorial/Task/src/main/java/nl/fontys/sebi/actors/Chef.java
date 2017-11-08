@@ -1,10 +1,7 @@
 package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import nl.fontys.sebi.messages.CompleteOrder;
-import nl.fontys.sebi.messages.PreparedMeal;
+import nl.fontys.sebi.Util;
 import nl.fontys.sebi.recipes.Recipe;
 
 /**
@@ -20,16 +17,7 @@ public class Chef extends AbstractActor {
             System.out.println("Chef prepares: " + recipe.getSimpleName());
             Recipe meal = recipe.newInstance();
             
-            if (meal.requireAttention()) {
-                long end = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(meal.getCookingTime());
-                
-                while (System.currentTimeMillis() < end) {
-                    System.nanoTime();
-                    System.currentTimeMillis();
-                }
-            } else {
-                Thread.sleep(meal.getCookingTime());
-            }
+            Util.wait(meal.getCookingTime(), !meal.requireAttention());
             
             return meal;
         } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
@@ -39,16 +27,9 @@ public class Chef extends AbstractActor {
     
     @Override
     public Receive createReceive() {
-        return receiveBuilder()
-                .match(CompleteOrder.class, order -> {
-                    List<Class<? extends Recipe>> recipes = order.getRecipes();
-                    
-                    for (Class<? extends Recipe> recipe : recipes) {
-                        Recipe meal = prepareMeal(recipe);
-                        PreparedMeal prepared = new PreparedMeal(order.getCustomer(), meal);
-                        getSender().tell(prepared, getSelf());
-                    }
-                }).build();
+        // TODO chef should handle the orders (CompleteOrder) and send the meal back to sender (getSender)
+        
+        return receiveBuilder().build();
     }
     
 }
