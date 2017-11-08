@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2017 lukeelten
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
@@ -35,16 +18,22 @@ import nl.fontys.sebi.messages.ClosingMessage;
 import nl.fontys.sebi.messages.CustomerEntered;
 import nl.fontys.sebi.messages.EatingFinished;
 import nl.fontys.sebi.messages.CompleteOrder;
+import nl.fontys.sebi.messages.EnteringMessage;
 import nl.fontys.sebi.messages.OpeningMessage;
 import nl.fontys.sebi.messages.PreparedMeal;
 import nl.fontys.sebi.recipes.BakedPotatos;
+import nl.fontys.sebi.recipes.ChilliCheeseKebab;
+import nl.fontys.sebi.recipes.CurryChicken;
+import nl.fontys.sebi.recipes.Hamburger;
 import nl.fontys.sebi.recipes.PastaAlaMax;
 import nl.fontys.sebi.recipes.Recipe;
 import nl.fontys.sebi.recipes.Steak;
 
 /**
+ * Restaurant Actor.
+ * Organized staff and tables at the restaurant.
  *
- * @author lukeelten
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
 public class Restaurant extends AbstractActor {
     
@@ -67,28 +56,44 @@ public class Restaurant extends AbstractActor {
             freeTables.add(i);
         }
         
-        List<Class<? extends Recipe>> menu = new ArrayList<>();
+        // What are we serving at all?
+        List<Class<? extends Recipe>> menu = new ArrayList<>(20);
         menu.add(BakedPotatos.class);
         menu.add(PastaAlaMax.class);
         menu.add(Steak.class);
+        menu.add(CurryChicken.class);
+        menu.add(Hamburger.class);
+        menu.add(ChilliCheeseKebab.class);
         
+        // TODO Q5 Why an unmodifiable collection?
         this.menu = Collections.unmodifiableList(menu);
     }
     
-    private void open() {
-        waiter = getContext().actorOf(Props.create(Waiter.class), "waiter");
+    /**
+     * The restaurant is opening.
+     * We should employ some staff.
+     * 
+     * @param msg 
+     */
+    private void open(OpeningMessage msg) {
+        Props waiterProps = Props.create(Waiter.class);
+        Props chefProps = Props.create(Chef.class);
+        
+        //waiter = getContext().actorOf(waiterProps, "waiter");
+        waiter = getContext().actorOf(new RoundRobinPool(msg.neededWaiters()).props(waiterProps), "waiter");
         getContext().watch(waiter);
         System.out.println("Created actor: " + waiter.path().toString());
         
         //chef = getContext().actorOf(Props.create(Chef.class), "chef");
-        chef = getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "chef");
+        chef = getContext().actorOf(new RoundRobinPool(msg.neededChefs()).props(chefProps), "chef");
         getContext().watch(chef);
         System.out.println("Created actor: " + chef.path().toString());
-        
-        enterRestaurant("Klaus");
-        enterRestaurant("Horst");
     }
     
+    /**
+     * Closes the restaurant.
+     * Kick out all customers and fire the staff.
+     */
     private void close() {
         System.out.println("Restaurant is closing");
         if (!customers.isEmpty()) {
@@ -102,6 +107,12 @@ public class Restaurant extends AbstractActor {
         chef.tell(PoisonPill.getInstance(), getSelf());
     }
     
+    /**
+     * A customer has finished eating.
+     * Kick him out so the table is free again.
+     * 
+     * @param customer 
+     */
     private void eatingFinished(ActorRef customer) {
         Integer table = -1;
         
@@ -128,27 +139,25 @@ public class Restaurant extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(OpeningMessage.class, om -> { open(); })
+                .match(OpeningMessage.class, om -> { open(om); })
                 .match(ClosingMessage.class, pp -> { close(); })
-                .match(Terminated.class, t -> t.actor().equals(chef), t -> {
-                    chef = null; 
-                    System.out.println("Chef had stopped working.");
+                .match(Terminated.class, t -> {
+                    System.out.println(t.actor().path() + " has stopped working");
                     
-                    if (waiter == null) {
-                        getSelf().tell(PoisonPill.getInstance(), ActorRef.noSender());
+                    if (t.actor().equals(waiter)) {
+                        waiter = null;
+                    } else if(t.actor().equals(chef)) {
+                        chef = null;
                     }
-                })
-                .match(Terminated.class, t -> t.actor().equals(waiter), t -> {
-                    waiter = null; 
-                    System.out.println("Waiter has stopped working");
                     
-                    if (chef == null) {
-                        getSelf().tell(PoisonPill.getInstance(), ActorRef.noSender());
+                    if (waiter == null && chef == null) {
+                        getContext().getSystem().terminate();
                     }
                 })
                 .match(PreparedMeal.class, pm -> {
                     waiter.tell(pm, getSelf());
                 })
+                .match(EnteringMessage.class, m -> { enterRestaurant(m.getName()); })
                 .match(CompleteOrder.class, fo -> {
                     chef.tell(fo, getSelf());
                 }).match(EatingFinished.class, ef -> {
@@ -156,7 +165,14 @@ public class Restaurant extends AbstractActor {
                     eatingFinished(customer);
                 }).build();
     }
-        
+     
+    /**
+     * Someone entered the restaurant.
+     * We should provide him a free table and send a waiter
+     * 
+     * @param name 
+     * @throws RuntimeException If there is no free table left
+     */
     private void enterRestaurant(final String name) {
         if (name == null) throw new NullPointerException();
         if (name.isEmpty()) throw new IllegalArgumentException();

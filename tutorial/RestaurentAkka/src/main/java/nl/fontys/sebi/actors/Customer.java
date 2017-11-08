@@ -1,20 +1,3 @@
-/*
- * Copyright (C) 2017 lukeelten
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
@@ -23,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import nl.fontys.sebi.Util;
 import nl.fontys.sebi.messages.CompleteOrder;
 import nl.fontys.sebi.messages.EatingFinished;
 import nl.fontys.sebi.messages.PreparedMeal;
@@ -33,11 +16,11 @@ import nl.fontys.sebi.recipes.Recipe;
 
 /**
  *
- * @author lukeelten
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
 public class Customer extends AbstractActor {
-    private final static Random random = new Random(System.currentTimeMillis());
     
+    private final Random random;
     private final String name;
     private final List<Class<? extends Recipe>> menu;
     
@@ -47,9 +30,11 @@ public class Customer extends AbstractActor {
         if (name == null || menu == null) throw new NullPointerException();
         if (menu.isEmpty()) throw new RuntimeException();
         
+        random = new Random(System.currentTimeMillis());
+        
         this.name = name;
         this.menu = menu;
-        order = new ArrayList<>();
+        order = new ArrayList<>(6);
     }
 
     public String getName() {
@@ -57,7 +42,7 @@ public class Customer extends AbstractActor {
     }
     
     private CompleteOrder getOrder() {
-        int meals = random.nextInt(10) + 1;
+        int meals = random.nextInt(3) + 1;
         
         for (int i = 0; i < meals; i++) {
             int menuIndex = abs(random.nextInt()) % menu.size();
@@ -74,17 +59,19 @@ public class Customer extends AbstractActor {
     
     private void receiveMeal(PreparedMeal meal) {
         Class<? extends Recipe> recipe = meal.getMeal().getClass();
-        int index = order.indexOf(recipe);
-        order.remove(index);
         
-        System.out.println("Received Meal: " + recipe.getSimpleName() + " - " + order.size() + " to go");
+        System.out.println(name + " received Meal: " + recipe.getSimpleName() + " - still " + (order.size() - 1) + " to go");
         
         try {
-            Thread.sleep(TimeUnit.SECONDS.toMillis(meal.getMeal().getEatingTime()));
+            Util.wait(meal.getMeal().getEatingTime(), true);
         } catch (InterruptedException ex) {
             throw new RuntimeException(ex);
         }
         
+        int index = order.indexOf(recipe);
+        order.remove(index);
+        
+        // TODO Q2 Does the order-list need synchronization somehow?
         if (order.isEmpty()) {
             getContext().getParent().tell(new EatingFinished(), getSelf());
         }

@@ -1,30 +1,24 @@
-/*
- * Copyright (C) 2017 Tobias Derksen <tobias.derksen@student.fontys.nl>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package nl.fontys.sebi;
 
 import java.util.concurrent.TimeUnit;
 
 /**
- *
+ * Utility class provides some common methods
+ * 
  * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
 public class Util {
     
+    /**
+     * This methods waits for a certain amount of time.
+     * You can indicate whether the thread should sleep or keeping busy.
+     * For sleeping, Thread.sleep is invoked. Otherwise a simple loop is 
+     * running until the time is up.
+     * 
+     * @param seconds Seconds to wait
+     * @param sleep Whether the thread should sleep or keep busy.
+     * @throws InterruptedException 
+     */
     public static void wait(int seconds, boolean sleep) throws InterruptedException {
         long milliSeconds = TimeUnit.SECONDS.toMillis(seconds);
         
@@ -38,7 +32,5 @@ public class Util {
                 System.currentTimeMillis();
             }
         }
-        
     }
-    
 }

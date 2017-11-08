@@ -1,48 +1,42 @@
-/*
- * Copyright (C) 2017 lukeelten
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
 package nl.fontys.sebi;
 
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.actor.Terminated;
 import java.io.IOException;
 import nl.fontys.sebi.actors.Restaurant;
+import nl.fontys.sebi.messages.EnteringMessage;
 import nl.fontys.sebi.messages.OpeningMessage;
+import scala.concurrent.Future;
 
 /**
- *
- * @author lukeelten
+ * Main class, simply runs the app
+ * 
+ * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
 public class Main {
-    
+       
     public static void main(String[] args) throws IOException, InterruptedException {
+       
         ActorSystem system = ActorSystem.create();
-        
         try {
-            ActorRef restaurant = system.actorOf(Props.create(Restaurant.class), "restaurant");
+            ActorRef restaurant = system.actorOf(Props.create(Restaurant.class, 10), "restaurant");
             
-            restaurant.tell(new OpeningMessage(), ActorRef.noSender());
+            restaurant.tell(new OpeningMessage(5, 3), ActorRef.noSender());
+            restaurant.tell(new EnteringMessage("Heinz"), restaurant);
+            restaurant.tell(new EnteringMessage("Hans"), restaurant);
+            restaurant.tell(new EnteringMessage("Klaus"), restaurant);
+            restaurant.tell(new EnteringMessage("Horst"), restaurant);
+            Future<Terminated> termination = system.whenTerminated();
             
-            System.out.println("Press ENTER to exit the system");
-            System.in.read();
-        } finally {
-            system.terminate();
+            while (!termination.isCompleted()) {
+                // TODO Q1 Will Thread.sleep at this position influence performance? 
+                Thread.sleep(100);
+            }
+        } catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
         }
     }
     

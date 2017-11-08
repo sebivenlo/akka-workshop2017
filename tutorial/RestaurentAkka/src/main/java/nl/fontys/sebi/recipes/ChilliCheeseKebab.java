@@ -1,15 +1,16 @@
 package nl.fontys.sebi.recipes;
 
 /**
- * Max´s special pasta, are you brave enough?
+ * Every meal can be improved simply by adding cheese.
+ * Want a beer?
  * 
  * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
-public class PastaAlaMax extends AbstractRecipe {
+public class ChilliCheeseKebab extends AbstractRecipe {
 
     @Override
     public int getCookingTime() {
-        return 2;
+        return 1;
     }
     
 }

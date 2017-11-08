@@ -1,15 +1,15 @@
 package nl.fontys.sebi.recipes;
 
 /**
- * Max´s special pasta, are you brave enough?
- * 
+ * 400ml coconut milk, 400g chicken, rice, onions, paprika, curry, pepper, salt
+ *
  * @author Tobias Derksen <tobias.derksen@student.fontys.nl>
  */
-public class PastaAlaMax extends AbstractRecipe {
+public class CurryChicken extends AbstractRecipe {
 
     @Override
     public int getCookingTime() {
-        return 2;
+        return 4;
     }
     
 }
