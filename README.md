@@ -1,7 +1,7 @@
 # Akka Workshop for Enterprise Software Development
 
 This workshop has been developed in course of the module Enterprise Software Development of Fontys School of Technology Venlo.
-The workshop date was **TBD**.
+The workshop date was 15th November 2017.
 
 ## Content
 This workshop is about the use and the concepts of the [Akka Java Framework](https://akka.io).
