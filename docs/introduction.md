@@ -10,3 +10,9 @@ In the thread model, threads share memory in order to work together. Values shar
 # The actor model
 <img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/actorModel.svg">
 The actor model avoids locking issues by specifically disallowing shared memory between actors. Each actor has private memory that is invisible to the rest of the sytem. Values that need to be shared can only be exchanged through messages.
+
+# Actor = Independed machine
+
+<img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/system-1527685_640.png">
+
+
