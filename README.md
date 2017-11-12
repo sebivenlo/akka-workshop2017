@@ -12,6 +12,4 @@ The purpose is to teach a group of students the basic concepts of Akka, how it c
 * Akka basics
 * Design principles
 * Comparison to legacy multi-threading
-* Akka streams
-* Akka HTTP
 * Akka TCP/UDP Actors
