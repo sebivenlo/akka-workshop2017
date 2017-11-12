@@ -14,6 +14,6 @@ The actor model avoids locking issues by specifically disallowing shared memory 
 # Actor = Independed machine
 
 <img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/system-1527685_640.png">
-Because of the independed memory we can think of an actor as an independed machine in a computer network. When solving a problem with the actor model, the core question is not __How do I solve this with multiple threads?__  but  __How do solve this with multiple computers?__
+Because of the independed memory we can think of an actor as an independed machine in a computer network. When solving a problem with the actor model, the core question is not *How do I solve this with multiple threads?* but *How do solve this with multiple computers?*. Because of this principle it is quite easy to actually do use multiple computers. Think cloud platform and docker!
 
 
