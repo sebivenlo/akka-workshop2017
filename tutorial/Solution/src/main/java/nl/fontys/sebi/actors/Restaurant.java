@@ -75,7 +75,7 @@ public class Restaurant extends AbstractActor {
      * 
      * @param msg 
      */
-    private void open(OpeningMessage msg) {
+    void open(OpeningMessage msg) {
         Props waiterProps = Props.create(Waiter.class);
         Props chefProps = Props.create(Chef.class);
         
@@ -94,7 +94,7 @@ public class Restaurant extends AbstractActor {
      * Closes the restaurant.
      * Kick out all customers and fire the staff.
      */
-    private void close() {
+    void close() {
         System.out.println("Restaurant is closing");
         if (!customers.isEmpty()) {
             customers.entrySet().stream().forEach(entry -> {
@@ -113,7 +113,7 @@ public class Restaurant extends AbstractActor {
      * 
      * @param customer 
      */
-    private void eatingFinished(ActorRef customer) {
+    void eatingFinished(ActorRef customer) {
         Integer table = -1;
         
         for (Entry<Integer, ActorRef> entry : customers.entrySet()) {
@@ -173,7 +173,7 @@ public class Restaurant extends AbstractActor {
      * @param name 
      * @throws RuntimeException If there is no free table left
      */
-    private void enterRestaurant(final String name) {
+    void enterRestaurant(final String name) {
         if (name == null) throw new NullPointerException();
         if (name.isEmpty()) throw new IllegalArgumentException();
         

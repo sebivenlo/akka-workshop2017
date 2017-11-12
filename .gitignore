@@ -377,3 +377,4 @@ nbdist/
 .nb-gradle/
 
 # End of https://www.gitignore.io/api/java,latex,linux,macos,maven,netbeans,intellij
+/tutorial/Solution/nbproject/

@@ -1,7 +1,9 @@
 package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
+import java.util.List;
 import nl.fontys.sebi.Util;
+import nl.fontys.sebi.messages.CompleteOrder;
 import nl.fontys.sebi.recipes.Recipe;
 
 /**
@@ -22,6 +24,16 @@ public class Chef extends AbstractActor {
             return meal;
         } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+    
+    void receiveCompleteOrder(CompleteOrder msg) {
+        List<Class<? extends Recipe>> recipes = msg.getRecipes();
+
+        for (Class<? extends Recipe> recipe : recipes) {
+            Recipe meal = prepareMeal(recipe);
+            
+            // TODO there should be something
         }
     }
     

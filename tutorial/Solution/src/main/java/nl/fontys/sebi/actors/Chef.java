@@ -2,7 +2,7 @@ package nl.fontys.sebi.actors;
 
 import akka.actor.AbstractActor;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import nl.fontys.sebi.Util;
 import nl.fontys.sebi.messages.CompleteOrder;
 import nl.fontys.sebi.messages.PreparedMeal;
 import nl.fontys.sebi.recipes.Recipe;
@@ -15,25 +15,26 @@ import nl.fontys.sebi.recipes.Recipe;
  */
 public class Chef extends AbstractActor {
     
-    private Recipe prepareMeal(Class<? extends Recipe> recipe) {
+    Recipe prepareMeal(Class<? extends Recipe> recipe) {
         try {
             System.out.println("Chef prepares: " + recipe.getSimpleName());
             Recipe meal = recipe.newInstance();
-            
-            if (meal.requireAttention()) {
-                long end = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(meal.getCookingTime());
-                
-                while (System.currentTimeMillis() < end) {
-                    System.nanoTime();
-                    System.currentTimeMillis();
-                }
-            } else {
-                Thread.sleep(meal.getCookingTime());
-            }
-            
+
+            Util.wait(meal.getCookingTime(), !meal.requireAttention());
+
             return meal;
         } catch (InstantiationException | IllegalAccessException | InterruptedException ex) {
             throw new RuntimeException(ex);
+        }
+    }
+    
+    void receiveCompleteOrder(CompleteOrder msg) {
+        List<Class<? extends Recipe>> recipes = msg.getRecipes();
+
+        for (Class<? extends Recipe> recipe : recipes) {
+            Recipe meal = prepareMeal(recipe);
+            PreparedMeal prepared = new PreparedMeal(msg.getCustomer(), meal);
+            getSender().tell(prepared, getSelf());
         }
     }
     
@@ -41,13 +42,7 @@ public class Chef extends AbstractActor {
     public Receive createReceive() {
         return receiveBuilder()
                 .match(CompleteOrder.class, order -> {
-                    List<Class<? extends Recipe>> recipes = order.getRecipes();
-                    
-                    for (Class<? extends Recipe> recipe : recipes) {
-                        Recipe meal = prepareMeal(recipe);
-                        PreparedMeal prepared = new PreparedMeal(order.getCustomer(), meal);
-                        getSender().tell(prepared, getSelf());
-                    }
+                    receiveCompleteOrder(order);
                 }).build();
     }
     

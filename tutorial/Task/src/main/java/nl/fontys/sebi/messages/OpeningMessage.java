@@ -26,5 +26,15 @@ public class OpeningMessage {
     public int neededWaiters() {
         return neededWaiters;
     }
-   
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof OpeningMessage) {
+            OpeningMessage obj = (OpeningMessage) o;
+            
+            return (neededChefs == obj.neededChefs && neededWaiters == obj.neededWaiters);
+        }
+        
+        return false;
+    }
 }

@@ -18,4 +18,15 @@ public class CustomerEntered {
     public ActorRef getCustomer() {
         return customer;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof CustomerEntered) {
+            CustomerEntered obj = (CustomerEntered) o;
+
+            return (customer == obj.customer || (customer != null && customer.equals(obj.customer)));
+        }
+
+        return false;
+    }
 }

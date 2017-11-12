@@ -26,4 +26,16 @@ public class CompleteOrder {
     public ActorRef getCustomer() {
         return customer;
     }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof CompleteOrder) {
+            CompleteOrder obj = (CompleteOrder) o;
+
+            return (recipes == obj.recipes || (recipes != null && recipes.equals(obj.recipes)))
+                    && (customer == obj.customer || (customer != null && customer.equals(obj.customer)));
+        }
+
+        return false;
+    }
 }

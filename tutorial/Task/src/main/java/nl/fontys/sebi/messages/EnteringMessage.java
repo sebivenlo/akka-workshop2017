@@ -16,4 +16,15 @@ public class EnteringMessage {
     public String getName() {
         return name;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof EnteringMessage) {
+            EnteringMessage obj = (EnteringMessage) o;
+            return (name == obj.name || (name != null && name.equals(obj.name)));
+        }
+        
+        return false;
+    }
+    
 }
