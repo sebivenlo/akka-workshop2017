@@ -1,1 +1,13 @@
 # Introduction
+The actor model is a computational model that consists of actors instead of threads.
+
+
+# The thread model
+<img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/threadModel.svg">
+In the thread model, threads share memory in order to work together. Values shared between threads need to be locked in order to assure their integrity. With locks come deadlocks, race condition and a difficult implementation problem.
+
+
+# The actor model
+<img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/actorModel.svg">
+
+The actor model avoids locking issues by specifically disallowing sharing memory between actors.
