@@ -27,3 +27,17 @@ If you want to start a new project using akka, you need the following maven depe
 4. Try to implement the missing functionality
 
 There are also questions at certain locations. Try to answer them, this will help you to understands the concepts.
+
+### Task Overview
+Do you remember the restaurant task from the [JAVA3](https://java3.fontysvenlo.org) course?
+
+
+
+### Structure
+
+
+### Parts to implement
+
+
+### Improvements?
+
