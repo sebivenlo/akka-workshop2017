@@ -27,9 +27,10 @@ abstract class AbstractRecipe implements Recipe {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Recipe) {
-            Recipe rhs = (Recipe) o;
+            Recipe obj = (Recipe) o;
             
-            return rhs.hashCode() == this.hashCode();
+            return getClass().equals(obj.getClass()) 
+                    && hashCode() == obj.hashCode();
         }
         
         return false;
