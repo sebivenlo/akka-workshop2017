@@ -1,4 +1,4 @@
-# Akka Workshop 2017
+# Akka Workshop - November 2017
 
 ### Table of Contents
 1. [Introduction](introduction.md)
@@ -18,4 +18,4 @@ Tobias Derksen - 4th year Software Engineering student
 [Start](introduction.md)
 
 <br><br><br>
-[Sources und further Resources](sources.md)
+[Further Resources](sources.md)
