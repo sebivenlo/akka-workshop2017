@@ -14,11 +14,6 @@
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-typed_2.12</artifactId>
-            <version>2.5.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.12</artifactId>
             <version>2.5.6</version>
         </dependency>
@@ -27,11 +22,6 @@
             <artifactId>akka-testkit_2.12</artifactId>
             <version>2.5.6</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-remote_2.12</artifactId>
-            <version>2.5.6</version>
         </dependency>
     </dependencies>
     <properties>
