@@ -34,11 +34,16 @@ public class NotImmutable2 {
 }
 
 public class Immutable {
+  // final primitives are always immutable
   private final int number;
-  private final String name;
+  // Same applies to objects of primitives 
   private final Double ratio;
+  // String is an immutable type
+  private final String name;
 }
 ```
+
+Small hint: If you, for some reasons, need to throw an exception inside the constructor, make sure your object is in a well-defined state.
 
 ## Actors
 An actor represents a worker thread for the system. You can start actors as much as you like or need.
@@ -77,7 +82,7 @@ context.actorSelection("/user/chef")
 ```
 
 
-## Running bulk-task using load balancing
+## Create actor pool
 ```java
 // Create 5 actor instances
 getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "chefs");
