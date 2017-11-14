@@ -16,7 +16,7 @@ In order to extract a Process and its associated Wearables, one only needs to sp
 
 ## Akka
 With the starting entity and path defined, the database can be queried. Concurrent extraction of entities can begin as soon as an entity has more than one connection to the next domain type (e.g the connections from AIP to Activities). 
-Basicly, each time the backend received a request it creates an _AbstractControllingActor_ which creates a large number of __DocumentActors__. The implementation of _AbstractControllingActor_ defines the operation to be executed and defines how the responses from the __DocumentActors__ are processed. 
+Every time the backend received a request it creates an _AbstractControllingActor_ which creates a large number of __DocumentActors__. The implementation of _AbstractControllingActor_ defines the operation to be executed and defines how the responses from the __DocumentActors__ are processed. 
 
 ![alt text](https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/sequence.svg "Sequence diagram showing the interaction between actors")
 
@@ -24,7 +24,7 @@ Basicly, each time the backend received a request it creates an _AbstractControl
 
 2. Upon receiving the __QueryMessage__, the __DocumentActor__ extracts the Process from __MongoDB__.
 
-3. The __DocumentActor__ invokes the __execute__ method of the __DocumentOperation__ implementation provided in the __QueryMessage__. In this case the database document is transformed to a specific JSON standart. 
+3. The __DocumentActor__ invokes the __execute__ method of the __DocumentOperation__ implementation provided in the __QueryMessage__. In this case the database document is transformed to a specific JSON standard. 
 
 4. The __DocumentOperation__ is executed. It sends its result to the ___AbstractControllingActor___.
 
