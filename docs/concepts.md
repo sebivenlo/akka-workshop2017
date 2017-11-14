@@ -101,3 +101,6 @@ Different types of pools:
 * SmallestMailbox Pool
 * Broadcast Pool
 * Some other types for special scenarios
+
+
+[Prev](concepts.md) | [Next](workshop.md)
