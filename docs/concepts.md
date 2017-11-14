@@ -81,8 +81,10 @@ You can simple query a an actor by address:
 context.actorSelection("/user/chef")
 ```
 
-
 ## Create actor pool
+If you want to create multiple actors of the same type, Akka will make it really easy.
+You can use a message-routing strategy (pool) of your choice annd Akka creates all the actors and sending the messages according to the chosen strategy. For your implementation there is no difference between using a single actor or multiple actors with a message-routing strategy.
+
 ```java
 // Create 5 actor instances
 getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "chefs");
@@ -91,3 +93,11 @@ getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "che
 DefaultResizer resizer = new DefaultResizer(2, 15);
 getContext().actorOf(new RoundRobinPool(5).withResizer(resizer).props(Props.create(Waiter.class)), "waiters");
 ```
+
+Different types of pools:
+* Round Robin Pool
+* Balancing Pool
+* Random Pool
+* SmallestMailbox Pool
+* Broadcast Pool
+* Some other types for special scenarios
