@@ -36,4 +36,4 @@ Every time the backend received a request it creates an _AbstractControllingActo
 
 8. The __DocumentActor__ sends his Done message to the ___AbstractControllingActor___. If the controller has received this message from all __DocumentActors__ it created, it has fullfilled its purpose and kills all children with poison pills and returns the result of the computation (This is not part of the sequence diagram).
 
-[Prev](Introduction.md) | [Next](concepts.md)
+[Prev](introduction.md) | [Next](concepts.md)
