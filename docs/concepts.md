@@ -5,7 +5,40 @@ The actor model is a concurrecny model which describes a system of blackboxes co
 
 ## Messages
 
+Messages are the basic communication concept inside Akka Actors.
+By convention, all messages have to be **IMMUTABLE**. Which means, that the state of the Message **and of all attributes** cannot change after construction. 
+Immutable objects cannot create data races, because to change them, you need to create a whole new object. The original one - which has been shared among the threads - will stay the same.
 
+One of the easiest way to achieve immutability is, when your class _does not have a state at all_.
+If you really need to transport data, make sure that you cannot change the attributes and that your attributes are immuatable as well.
+
+Example:
+```java
+public class NotImmutable {
+  private final List<Object> list;
+  public List<Object> getList() {
+    return list; // List ca be altered outside
+  }
+}
+
+public class NotImmutable2 {
+  private final List<Object> list;
+  public NotImmutable(final List<Object> list) {
+    // List can be changed after given to the constructor
+    this.list = list;
+  }
+  public List<Object> getList() {
+    // List cannot be altered outside
+    return Collections.unmodifiableList(list);
+  }
+}
+
+public class Immutable {
+  private final int number;
+  private final String name;
+  private final Double ratio;
+}
+```
 
 ## Actors
 An actor represents a worker thread for the system. You can start actors as much as you like or need.
@@ -46,5 +79,10 @@ context.actorSelection("/user/chef")
 
 ## Running bulk-task using load balancing
 ```java
-getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "chef");
+// Create 5 actor instances
+getContext().actorOf(new RoundRobinPool(5).props(Props.create(Chef.class)), "chefs");
+
+// Dynamicly create instances
+DefaultResizer resizer = new DefaultResizer(2, 15);
+getContext().actorOf(new RoundRobinPool(5).withResizer(resizer).props(Props.create(Waiter.class)), "waiters");
 ```
