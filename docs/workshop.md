@@ -30,7 +30,13 @@ There are also questions at certain locations. Try to answer them, this will hel
 
 ### Task Overview
 Do you remember the restaurant task from the [JAVA3](https://java3.fontysvenlo.org) course?
+([Original assignment description](https://java3.fontysvenlo.org/material/clab-1_en.pdf))
 
+One of the most challenging part of this assignment is the synchronization between the restaurant manager, the chef who cooks the meals and the waiter who collects orders and serves meals.
+There are a lot of different possibilities to solve the problems, some of them works with the some Java features which are available now for a long time (see [wait-notify](https://docs.oracle.com/javase/tutorial/essential/concurrency/guardmeth.html)).
+You can also make use of the advanced [Java Executor Framework](https://docs.oracle.com/javase/tutorial/essential/concurrency/executors.html)
+
+For our workshop task we will try to implement the a restaurant using **Akka Actors**.
 
 
 ### Structure
@@ -39,5 +45,15 @@ Do you remember the restaurant task from the [JAVA3](https://java3.fontysvenlo.o
 ### Parts to implement
 
 
+
 ### Improvements?
 
+The task offers a lot of opportunities to improve the implementation.
+* Increase number of recipes
+* Create customer-actors outside of restaurant
+* Make customer order not random
+* Direct communication between Waiter and customer using ActorSelections
+* Direct communication between Chef and Waiter using ActorSelection
+
+You can also think of your own improvements. Maybe restructuring the whole application. 
+Or pulling out some actors to run somewhere else and connecting them using networks (see [Akka Networking](https://doc.akka.io/docs/akka/2.5/java/index-network.html))
