@@ -2,8 +2,8 @@
 
 ### Table of Contents
 1. [Introduction](introduction.md)
-2. [Basic Akka Concepts](concepts.md)
-3. [Show-Case](showcase.md)
+2. [Show-Case](showcase.md)
+3. [Basic Akka Concepts](concepts.md)
 4. [Tutorial / Workshop](workshop.md)
 
 
