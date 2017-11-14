@@ -33,3 +33,5 @@ Every time the backend received a request it creates an _AbstractControllingActo
 6. The __DocumentActor__ sends a __QuertyMessage__ for each connected entity of the next type (It extracts the ActivityInProcess id from the Process document and creates a __QueryMessage__ with that id and ACTIVITYINPROCESS as type. The rest of the data is copied from the initial __QueryMessage__. 
 
 7. The ___AbstractControllingActor___ checks whether the entity specified in the received __QueryMessage__ qm has already been processed. If not, it creates a new __DocumentActor__ and forwards qm to it. (This is the start of recursion)
+
+8. The __DocumentActor__ sends his Done message to the ___AbstractControllingActor___. If the controller has received this message from all __DocumentActors__ it created, it has fullfilled its purpose and kills all children with poison pills and returns the result of the computation (This is not part of the sequence diagram).
