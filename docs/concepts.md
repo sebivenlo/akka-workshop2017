@@ -101,3 +101,26 @@ Different types of pools:
 * SmallestMailbox Pool
 * Broadcast Pool
 * Some other types for special scenarios
+
+## Setup Akka Project
+
+__Maven Dependencies__
+If you want to start a new project using akka, you need the following maven dependencies:
+```xml
+<dependency>
+    <groupId>com.typesafe.akka</groupId>
+    <artifactId>akka-actor_2.12</artifactId>
+    <version>2.5.6</version>
+    <type>jar</type>
+</dependency>
+<dependency>
+    <groupId>com.typesafe.akka</groupId>
+    <artifactId>akka-testkit_2.12</artifactId>
+    <version>2.5.6</version>
+    <scope>test</scope>
+    <type>jar</type>
+</dependency>
+```
+
+
+[Prev](concepts.md) | [Next](workshop.md)
