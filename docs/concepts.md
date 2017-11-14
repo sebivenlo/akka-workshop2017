@@ -104,7 +104,7 @@ Different types of pools:
 
 ## Setup Akka Project
 
-__Maven Dependencies__
+__Maven Dependencies__ <br>
 If you want to start a new project using akka, you need the following maven dependencies:
 ```xml
 <dependency>
@@ -122,5 +122,22 @@ If you want to start a new project using akka, you need the following maven depe
 </dependency>
 ```
 
+
+# Other parts of Akka
+
+### [Akka Networking](https://doc.akka.io/docs/akka/current/java/index-network.html)
+Akka subsystem which allows to communicate with actor via TCP or UDP.
+
+### [Akka Streams](https://doc.akka.io/docs/akka/current/java/stream/index.html)
+An intuitive and safe way to do asynchronous, non-blocking backpressured stream processing.
+
+### [Akka HTTP](https://doc.akka.io/docs/akka-http/current/java/http/index.html)
+Asynchronous, modern and fast HTTP server and client.
+
+### [Akka Persistence](https://doc.akka.io/docs/akka/current/java/persistence.html)
+Preserve the state of an actor so it can reach the same state after restart.
+
+
+<br><br>
 
 [Prev](concepts.md) | [Next](workshop.md)
