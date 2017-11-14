@@ -65,7 +65,7 @@ public class Restaurant extends AbstractActor {
         menu.add(Hamburger.class);
         menu.add(ChilliCheeseKebab.class);
         
-        // TODO Q5 Why an unmodifiable collection?
+        // TODO Q4 Why an unmodifiable collection?
         this.menu = Collections.unmodifiableList(menu);
     }
     
@@ -173,7 +173,7 @@ public class Restaurant extends AbstractActor {
             Props props = Props.create(Customer.class, name, menu);
             Integer table = freeTables.poll();
             
-            ActorRef customer = getContext().actorOf(props, ("customer" + table));
+            ActorRef customer = getContext().actorOf(props);
             customers.put(table, customer);
             
             waiter.tell(new CustomerEntered(customer), getSelf());
