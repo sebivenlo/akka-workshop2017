@@ -15,6 +15,6 @@ public class RestaurantTest extends ActorTestBase<Restaurant> {
     }
 
     /**
-     * @todo Implement tests
+     * TODO Implement tests
      */
 }

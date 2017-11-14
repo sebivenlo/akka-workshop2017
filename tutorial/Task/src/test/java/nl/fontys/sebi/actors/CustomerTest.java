@@ -15,6 +15,6 @@ public class CustomerTest extends ActorTestBase<Customer> {
     }
     
     /**
-     * @todo Implement tests
+     * TODO Implement tests
      */
 }
