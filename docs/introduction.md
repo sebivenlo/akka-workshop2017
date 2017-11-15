@@ -2,12 +2,12 @@
 The actor model is a computational model designed around concurrency. This introduction explains the differences between the actor model and the defaul thread model. 
 
 
-# The thread model
+# The Thread Model
 <img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/threadModel.svg">
 In the thread model, threads share memory in order to work together. Values shared between threads nee d to be locked in order to assure their integrity. With locks come deadlocks, race condition and a difficult implementation process.
 
 
-# The actor model
+# The Actor Model
 <img align="top" src="https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/actorModel.svg">
 The actor model avoids locking issues by specifically disallowing shared memory between actors. Each actor has private memory that is invisible to the rest of the sytem. Values that need to be shared can only be exchanged through messages. The actor model defines the capabilities of actors on a very high level:
 
