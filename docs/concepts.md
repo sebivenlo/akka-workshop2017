@@ -92,8 +92,12 @@ The biggest advantages of this concept is, that it does not mattter on which mac
 Addresses can be absoulte, just like in filesystems or internet addresses, or can be relative to the actor you performs the query.
 You can simple query a an actor by address:
 ```java
-context.actorSelection("/user/chef")
+context.actorSelection("/user/actor"); // select specific actor
+context.actorSelection("/user/parent/child"); // Select child of some parent actor
+context.actorSelection("../brother"); // Select actor relative to current actor
+context.actorSelection("akka.tcp://user@host:2552/user/actor"); // Select remote actor
 ```
+_Be aware that actor selection says nothing whether there is an actual actor with this name. You need to do extra steps to find out whether there is an actor matching your path. Otherwise your messages will be lost._
 
 ## Stopping Actors
 Stopping actors is inevitable at some point in time. Actors uses a considerable amount of memory, if you fail to stop them properly, you will run out of memory.
@@ -119,7 +123,7 @@ Terminating the Actor System will automatically stop all actors.
 system.terminate();
 ```
 
-## Create actor pool
+## Create Actor pool
 If you want to create multiple actors of the same type, Akka will make it really easy.
 You can use a message-routing strategy (pool) of your choice annd Akka creates all the actors and sending the messages according to the chosen strategy. For your implementation there is no difference between using a single actor or multiple actors with a message-routing strategy.
 
