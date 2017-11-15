@@ -1,10 +1,9 @@
 # Basic Concepts of Akka
 
-## The Actor model
+## The Actor Model
 The actor model is a concurrecny model which describes a system of blackboxes communicating through immutable messages. A good way to think in this: How do I implement this using multiple computers?
 
 ## Messages
-
 Messages are the basic communication concept inside Akka Actors.
 By convention, all messages have to be **IMMUTABLE**. Which means, that the state of the Message **and of all attributes** cannot change after construction. 
 Immutable objects cannot create data races, because to change them, you need to create a whole new object. The original one - which has been shared among the threads - will stay the same.
@@ -49,24 +48,39 @@ Small hint: If you, for some reasons, need to throw an exception inside the cons
 An actor represents a worker thread for the system. You can start actors as much as you like or need.
 Different actors can respond to different messages, you can simply send your messages to all actors hoping someone will handle it. This is obviously not very efficient. Maybe you will get multiple results or - even worse - none at all.
 
-
-
-# Examples
+## Define Actor Classes
+Defining your own actor is very simple. You only need to extend from AbstractActor provided by Akka and implements one method.
+The createReceive() method returns a setup of (lambda-)functions which are called when a certain message is received.
+```java
+public class Actor extends AbstractActor {
+    @Override
+    public Receive createReceive() {
+        return receiveBuilder()
+            .match(Message.class, msg -> {
+                // Do something
+             }).build();
+    }
+}
+```
 
 ## Actor System
-
+Before you can start an actor, you need t0 create an Actor System which will supervise all actors.
 ```java
 ActorSystem system = ActorSystem.create();
+
+// Termiantion will stop all actors
 system.terminate();
 ```
 
-## Actors
+## Creating Actors
 ```java
 ActorRef restaurant = system.actorOf(Props.create(Restaurant.class), "restaurant");
 ActorRef chef = getContext().actorOf(Props.create(Chef.class), "chef");
 ```
 
 ## Sending Messages
+Sending Messages is very easy, just "tell" the actor what you want to send. Important is to think about who is the sender of this message. Normally, the actor reponse to this "sender". In some cases, this is not a trivial problem.
+You can send any object you like as message but remember: __Message must be immutable__.
 ```java
 restaurant.tell(new DoSomethingMessage(), ActorRef.noSender());
 chef.tell(new DoSomethingMessage(), getSelf());
@@ -79,6 +93,30 @@ Addresses can be absoulte, just like in filesystems or internet addresses, or ca
 You can simple query a an actor by address:
 ```java
 context.actorSelection("/user/chef")
+```
+
+## Stopping Actors
+Stopping actors is inevitable at some point in time. Actors uses a considerable amount of memory, if you fail to stop them properly, you will run out of memory.
+
+You can stop actors by telling them directly to stop. If you stop an actor which is the parent of one or more child actor, the parent actor will stop the children first and stop themself after the last child has been stopped.
+```java
+// Stop child actors
+getContext().stop(child);
+
+// Stop self
+getContext().stop(getSelf());
+```
+
+If you want to stop the actor after processing all previous messages, you can add up a PoisonPill message in the message queue.
+The actor will stop after processing this message.
+```java
+// Lineup poison pill in message queue
+actor.tell(PoisonPill.getInstance(), ActorRef.noSender());
+```
+
+Terminating the Actor System will automatically stop all actors.
+```java
+system.terminate();
 ```
 
 ## Create actor pool
@@ -123,7 +161,7 @@ If you want to start a new project using akka, you need the following maven depe
 ```
 
 
-# Other parts of Akka
+# Other Parts of Akka
 
 ### [Akka Networking](https://doc.akka.io/docs/akka/current/java/index-network.html)
 Akka subsystem which allows to communicate with actor via TCP or UDP.
