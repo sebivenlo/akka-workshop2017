@@ -55,4 +55,5 @@ The task offers a lot of opportunities to improve the implementation.
 You can also think of your own improvements. Maybe restructuring the whole application. 
 Or pulling out some actors to run somewhere else and connecting them using networks (see [Akka Networking](https://doc.akka.io/docs/akka/2.5/java/index-network.html))
 
+<br><br>
 [Prev](concepts.md)
