@@ -10,6 +10,8 @@
 6. Improve the program with one of the ideas below or come up with your own improvement
 
 There are also questions at certain locations. Try to answer them, this will help you to understands the concepts.
+<br>
+See also: [Akka Javadocs](https://doc.akka.io/japi/akka/current/index.html?akka/actor/package-summary.html)
 
 ### Task Overview
 Do you remember the restaurant task from the [JAVA3](https://java3.fontysvenlo.org) course?
