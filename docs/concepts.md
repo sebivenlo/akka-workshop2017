@@ -144,6 +144,16 @@ Different types of pools:
 * Broadcast Pool
 * Some other types for special scenarios
 
+## Advanced Patterns
+Akka provides some helpers for commonly used patterns.
+For example you can "ask" something which means that you send a message to an actor and wait for an answer.
+You can also pipe the answer directly to another actor.
+
+```java
+ComplectionStage<Object> cs = PatternsCS.ask(actor, new Message(), 3000); // Returns a Completion Stage which allows to handle the actor`s answer asynchronously when it occures or give it to another actor.
+PatternsCS.pipe(cs, getContext().dispatcher()).to(actor2);
+```
+
 ## Setup Akka Project
 
 __Maven Dependencies__ <br>
