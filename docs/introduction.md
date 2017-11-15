@@ -28,5 +28,5 @@ ___The Actor Model is based on one-way asynchronous communication. Once a messag
 
 Because of the abstract nature of the actor model, it can not make assumption about the actors within a system and their communication channels: Actors can be threads on the a local JVM or dedicated hardware communicating over an unreliable phone connection. There are no guarantees on message delivery within the actor model, because any protocol would be unnecessary overhead on the JVM while the unreliable phone connection requires a well defined protocol to deal with lost messages. If message reliability is an issue, the developer (or the actor model implementing framework) needs to implement a protocol for the communication between actors.
 
-
+<br><br>
 [Next](showcase.md)
