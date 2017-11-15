@@ -68,7 +68,7 @@ Before you can start an actor, you need t0 create an Actor System which will sup
 ```java
 ActorSystem system = ActorSystem.create();
 
-// Termiantion will stop all actors
+// System´s termination will stop all actors
 system.terminate();
 ```
 
@@ -160,7 +160,6 @@ If you want to start a new project using akka, you need the following maven depe
 </dependency>
 ```
 
-
 # Other Parts of Akka
 
 ### [Akka Networking](https://doc.akka.io/docs/akka/current/java/index-network.html)
@@ -174,7 +173,6 @@ Asynchronous, modern and fast HTTP server and client.
 
 ### [Akka Persistence](https://doc.akka.io/docs/akka/current/java/persistence.html)
 Preserve the state of an actor so it can reach the same state after restart.
-
 
 <br><br>
 
