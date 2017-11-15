@@ -1,4 +1,4 @@
-# LOGwear Knowledge-base backend application
+# LOGwear Knowledge-base Backend Application
 
 The Backend of the LOGwear Knowledge-base is responsible for CRUD operation and feeding json to different applications based on a fairly complex Mongo database.
 
@@ -10,7 +10,7 @@ In order to get wearables associated with a process one needs to retrieve the fo
 ![alt text](https://github.com/sebivenlo/akka-workshop2017/blob/master/resources/domain.gif "Animation of the algorithm")
 
 
-# Required input for the database operation
+# Required Input for the Database Operation
 In order to extract a Process and its associated Wearables, one only needs to specify the Process with an id and the last type in the path (in this case Wearables). A simple pathfinding algorithm finds the complete path __(Process, ActivityInProcess, Activity, DataAssociation, DataObject, DataObjectClasses, WearableFacilitation, Interfaces, Wearables)__ required to extract the desired data. 
 
 
@@ -36,4 +36,5 @@ Every time the backend received a request it creates an _AbstractControllingActo
 
 8. The __DocumentActor__ sends his Done message to the ___AbstractControllingActor___. If the controller has received this message from all __DocumentActors__ it created, it has fullfilled its purpose and kills all children with poison pills and returns the result of the computation (This is not part of the sequence diagram).
 
+<br><br>
 [Prev](introduction.md) | [Next](concepts.md)
